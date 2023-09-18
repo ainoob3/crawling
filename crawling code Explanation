@@ -1,0 +1,104 @@
+# 1. 인터넷에서 3개이상의 크롤링 코드들 찾기 (github, 개인블로그, 등등)
+
+# ㄱ. [크롤링] 파이썬으로 네이버 뉴스 크롤링하기
+# [크롤링] 파이썬으로 네이버 뉴스 크롤링하기 코딩 도중 
+# ModuleNotFoundError: No module named 'requests' 에러가 발생 
+# 에러 해결위해 GPT에게 물어보았는데 위 오류 메시지를 GPT는 requests 모듈이 설치되어 있지 않을 때 발생한다고 답변함. 
+# 그러나 이 오류 메시지가 출력되기전 이미 CMD 창을 열어서 pip inatall requsets 명령어를 수행한 상태였고 reequsets 모듈도 설치가 잘 끝난 시점이었음.
+
+# 그후 requsets 모듈을 삭제, 재설치 / 아나콘다를 이용하여 재설치 하였음에도 불구하고 오류가 해결되지 않음. 
+# 마지막으로 컴퓨터의 내용을 초기화하고 다시 requests 모듈을 설치하였더니 오류가 해결됨.
+# 이후 나머지 
+
+# ㄴ. [Python] 카테고리별 네이버 기사 크롤링 (tistory.com)
+# ㄷ. WONA_IN_IT (tistory.com)
+# 등은 실행하는데 큰 오류가 없었음.
+
+# 이것만으로는 부족하다고 판단하여
+# ㄹ. [특강] 웹크롤링(Web Crowling) 기초 개념과 코드 구현https://auto-trading.tistory.com/entry/%ED%8A%B9%EA%B0%95-%EC%9B%B9%ED%81%AC%EB%A1%A4%EB%A7%81Web-Crowling-%EA%B8%B0%EC%B4%88-%EA%B0%9C%EB%85%90%EA%B3%BC-%EC%BD%94%EB%93%9C-%EA%B5%AC%ED%98%84with-Python 
+ 
+# ㅁ. 학교식단 크롤링하기 https://think9.github.io/2019-09-17-crawling-bablabs/ 
+
+# 위의 2가지 사이트를 참고 함.
+
+# 2. 자신이 수집하고 싶은 사이트 정하기 (자유주제)
+
+# 저는 금오공과 대학교의 생활관 식단을 크롤링 하기로 결정하였습니다.
+# 그 이유로는 최근에 생활관 식단을 알려주는 앱이 있었는데 그 앱이 사라져서 
+# 식단을 알아내는데에 힘이 많이 들어서 크롤링 해야겠다고 결정하였습니다.
+
+# 3. 웹페이지의 형태를 파악하여, 적절한 수집방법 제시하기
+
+# ㄱ. 동적/동적이지 않은 사이트인지 확인하여 셀레니움 사용여부 판단하기
+# 금오공과 대학교의 생활관 식단을 알려주는 사이트는 동적이지 않은 ‘정적인’ 사이트이기에 
+# ‘selenium’을 사용하지 않았음. 
+
+# ㄴ. 사이트에서 개발자 도구를 열어 어떻게 크롤링 해야할지 판단하기
+# 크롤링 할 금오공대 생활관 식단 사이트의 개발자 도구를  열어서 코드를 뜯어보니 
+# 크게 요일, 중식,석식 표시, 어떤 음식이 나오는지 이렇게 3가지로 분류되는 것을 확인할수 있었음. 따라서 위 사이트는 저 3가지 요인들을 따와서 합치는 방식으로 크롤링하면 좋을 것임.
+
+
+
+
+# 4. 크롤링 결과 테이블로 정리해서 보여주기. 
+
+# 1. 인터넷에서 3개이상의 크롤링 코드들 찾기 (github, 개인블로그, 등등)을 참고하여 웹사이트 상에서 크롤링 할수 있는 간단한 코드를 만들 수 있었음.
+
+
+# import requests
+# from bs4 import BeautifulSoup
+# url ="https://dorm.kumoh.ac.kr/dorm/restaurant_menu01.do"
+# headers ={"User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"}
+# res =requests.get(url, headers=headers)
+# soup =BeautifulSoup(res.text, 'lxml')  
+# food =soup.find_all("ul",{"class":"s-dot"})
+# date =soup.find("th",{"scope":"col"})
+# print(food)
+
+
+# 그러나 사이트를 크롤링 하면서 문제가 2가지가 발생함. 
+
+# 첫 번째는 아래 그림과 같이 태그 여러개가 같은 이름으로 되있기에 이들의 순서를 어떻게 적용해야 하는가 라는 문제이고.
+
+# 두 번째는 각기 떨어져 있는 요일, 중(석)식 표기, 음식 표기 등을 어떻게 한줄로 
+# 출력해야 하는가 라는 문제였다.
+
+# 첫번째로 같은 이름의 태그가 여러개가 존재하기에 
+# for tr_tag in soup.find_all('tr'):
+ #    row_number = 0
+  #   order_td = soup.new_tag('td')
+   #  order_td.string = str(row_number)
+   # tr_tag.insert(0, order_td)
+  #  row_number += 1
+# 이렇게 tr 태그가 불려질때마다 순서를 매기는 방식으로 진행하였다.
+
+# 그러나 이렇게 테이블에 순서를 매겨도 요일과 석식, 중식 등이 제대로 출력되지 않았다.
+
+# 그레서 중식 식단표에는 1,3,5,7 . . . 
+# 석식 식단표애는 2,4,6,8 . . .
+#  이런식으로 번호를 부여 하고
+
+# 요일별로 선택할수 있는 선택지를 만들어서
+
+# days = ['월', '화', '수', '목', '금']
+
+# for i, day in enumerate(days):
+  #  print(f"{i+1}.{day}\t", end='')
+
+# print()
+
+# userInput = int(input("요일을 선택하세요 : "))
+# print()
+
+# if userInput == 1:
+  #   print("<월요일 식단>")
+# elif userInput == 2:
+  #  print("<화요일 식단>")
+# elif userInput == 3:
+  #  print("<수요일 식단>")
+# elif userInput == 4:
+  #  print("<목요일 식단>")
+# elif userInput == 5:
+  #  print("<금요일 식단>")
+
+# 만약 사용자가 월요일 식단표를 보고자 한다면 1, 2 를 불러와서 함께 출력하는 방식으로 코드를 작성중에 있다.
