@@ -12,7 +12,7 @@ if res.status_code == 200: # HTTP GET 요청이 수락(200)되었을 경우 아�
     lunch_menu_p = soup.find_all('p', text='중식')
     dinner_menu_p = soup.find_all('p', text='석식')
 
-    days = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일월요일"] # 리스트에 각 요일 저장
+    days = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"] # 리스트에 각 요일 저장
     
     # enumerate(zip(lunch_menu_p, dinner_menu_p), start=0)를 사용하여 lunch_menu_p와 dinner_menu_p를 병렬로 순회하면서, 각 요일에 해당하는 메뉴 정보를 가져와 출력
     for i, (lunch_p, dinner_p) in enumerate(zip(lunch_menu_p, dinner_menu_p), start=0): 
@@ -20,7 +20,7 @@ if res.status_code == 200: # HTTP GET 요청이 수락(200)되었을 경우 아�
         print(f"\n{day_of_week} 식단\n")
         
         print(f"중식\n")
-        lunch_menu_items = lunch_p.find_next('ul', class_='s-dot').find_all('li')
+        lunch_menu_items = lunch_p.find_next('ul', class_='s-dot').find_all('li') # lunch_menu_items 변수에 "중식" 메뉴 항목을 저장하고, 각 항목의 텍스트를 가져와 출력
         for item in lunch_menu_items:
             print(item.get_text(strip=True))
         
@@ -29,7 +29,7 @@ if res.status_code == 200: # HTTP GET 요청이 수락(200)되었을 경우 아�
         for item in dinner_menu_items:
             print(item.get_text(strip=True))
 else:
-    print('요청이 거절되었습니다.')
+    print('요청이 거절되었습니다.') # 만약 HTTP GET 요청이 거절되면, "요청이 거절되었습니다." 메시지가 출력
     
 
  
