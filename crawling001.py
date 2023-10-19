@@ -6,7 +6,7 @@ headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36
 res = requests.get(url, headers=headers) # requests 라이브러리를 사용하여 HTTP GET 요청을 보냄(이에 대한 응답은 res변수에 저장)
 
 if res.status_code == 200: # HTTP GET 요청이 수락(200)되었을 경우 아래 코드를 실행
-    soup = BeautifulSoup(res.text, 'lxml')
+    soup = BeautifulSoup(res.text, 'lxml') # BeautifulSoup을 사용하여 웹 페이지의 HTML 코드를 파싱하고, 파싱된 결과를 soup 변수에 저장
 
     # "중식","석식" 항목을 모두 찾고 대응되는 변수에 할당
     lunch_menu_p = soup.find_all('p', text='중식')
@@ -20,12 +20,12 @@ if res.status_code == 200: # HTTP GET 요청이 수락(200)되었을 경우 아�
         print(f"\n{day_of_week} 식단\n")
         
         print(f"중식\n")
-        lunch_menu_items = lunch_p.find_next('ul', class_='s-dot').find_all('li') # lunch_menu_items 변수에 "중식" 메뉴 항목을 저장하고, 각 항목의 텍스트를 가져와 출력
+        lunch_menu_items = lunch_p.find_next('ul', class_='s-dot').find_all('li') # lunch_menu_items 변수에 "중식(lunch_menu_p)" 메뉴 항목을 저장하고, 각 항목의 텍스트를 가져와 출력
         for item in lunch_menu_items:
             print(item.get_text(strip=True))
         
         print(f"\n석식\n")
-        dinner_menu_items = dinner_p.find_next('ul', class_='s-dot').find_all('li')
+        dinner_menu_items = dinner_p.find_next('ul', class_='s-dot').find_all('li') # . . . "석식(dinner_menu_p)" ...
         for item in dinner_menu_items:
             print(item.get_text(strip=True))
 else:
